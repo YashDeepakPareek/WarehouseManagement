@@ -7,9 +7,12 @@ public class DBSQL {
     // Constructor establishes the connection to the database.
     public DBSQL() {
         try {
-            // Using SQLite for simplicity. Replace the connection string if using another DB.
-            String url = "jdbc:sqlite:warehouse.db";
-            connection = DriverManager.getConnection(url);
+            // Outdated: Using SQLite for simplicity. Replace the connection string if using another DB.
+            // Updated: The connection line now refers to an MySQL DB.
+            String url = "jdbc:mysql://localhost:3306/warehouse_db";
+            String user = "warehouse_admin";
+            String password = "admin123";
+            connection = DriverManager.getConnection(url, user, password);
 
             if (connection == null) {
                 System.out.println("Database connection failed!");

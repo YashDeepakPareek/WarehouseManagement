@@ -1,7 +1,7 @@
 CREATE DATABASE warehouse_db;
 CREATE USER 'warehouse_admin'@'localhost' IDENTIFIED BY 'admin123';
 use sys;
-GRANT ALL PRIVILEGES ON warehouse_db.* TO 'warehouse_user'@'localhost';
+GRANT ALL PRIVILEGES ON warehouse_db.* TO 'warehouse_admin'@'localhost';
 FLUSH PRIVILEGES;
 
 use warehouse_db;
