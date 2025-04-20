@@ -1,5 +1,4 @@
 package com.warehouse.model;
-
 import java.sql.*;
 
 public class DBSQL {
