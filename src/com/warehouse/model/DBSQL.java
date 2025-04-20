@@ -1,5 +1,7 @@
 package com.warehouse.model;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBSQL {
     private Connection connection;
@@ -130,5 +132,72 @@ public class DBSQL {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<String> getAllCategories() {
+        List<String> categories = new ArrayList<>();
+        String query = "SELECT category FROM ItemCategory";
+
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                categories.add(resultSet.getString("category"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categories;
+    }
+
+    public void insertItemCategory(String category) {
+        String insertCategorySQL = "INSERT OR IGNORE INTO ItemCategory(category) VALUES(?)";
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(insertCategorySQL)) {
+            preparedStatement.setString(1, category);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertItem(String description, double height, double width, double depth, double volume, String location, int quantity_in_stock, String category) {
+        insertItemCategory(category);
+
+        int categoryId = getCategoryId(category);
+
+        String insertItemSQL = "INSERT INTO Item(description, height, width, depth, volume, location, quantity_in_stock, category_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(insertItemSQL)) {
+        preparedStatement.setString(1, description);
+        preparedStatement.setDouble(2, height);
+        preparedStatement.setDouble(3, width);
+        preparedStatement.setDouble(4, depth);
+        preparedStatement.setDouble(5, volume);
+        preparedStatement.setString(6, location);
+        preparedStatement.setInt(7, quantity_in_stock);
+        preparedStatement.setInt(8, categoryId);
+        preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+        e.printStackTrace();
+        }
+    }
+
+    private int getCategoryId(String category) {
+        String query = "SELECT id FROM ItemCategory WHERE category = ?";
+        int categoryId = -1;
+
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(query)) {
+            preparedStatement.setString(1, category);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                categoryId = resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categoryId;
     }
 }
