@@ -22,8 +22,8 @@ public class DBSQL {
                 System.out.println("Connected to database successfully.");
             }
             // Create the Users table if it does not exist.
-            createTable();
-            createEmployeeTable();
+            // createTable();
+            // createEmployeeTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -31,7 +31,7 @@ public class DBSQL {
 
     // Create the Users table.
     public void createTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS Users (" + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username TEXT UNIQUE NOT NULL, " + "password TEXT NOT NULL);";
+        String sql = "CREATE TABLE IF NOT EXISTS Users (" + "id INTEGER PRIMARY KEY AUTO_INCREMENT, " + "username TEXT UNIQUE NOT NULL, " + "password TEXT NOT NULL);";
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
@@ -161,12 +161,11 @@ public class DBSQL {
         }
     }
 
-    public void insertItem(String description, double height, double width, double depth, double volume, String location, int quantity_in_stock, String category) {
-        insertItemCategory(category);
+    public Boolean insertItem(String description, double height, double width, double depth, double volume, String location, int quantity_in_stock, String category) {
 
         int categoryId = getCategoryId(category);
 
-        String insertItemSQL = "INSERT INTO Item(description, height, width, depth, volume, location, quantity_in_stock, category_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertItemSQL = "INSERT INTO Item(description, height, width, depth, volume, location, quantity_in_stock, category) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = this.connection.prepareStatement(insertItemSQL)) {
         preparedStatement.setString(1, description);
@@ -178,8 +177,10 @@ public class DBSQL {
         preparedStatement.setInt(7, quantity_in_stock);
         preparedStatement.setInt(8, categoryId);
         preparedStatement.executeUpdate();
+        return true;
         } catch (SQLException e) {
         e.printStackTrace();
+        return false;
         }
     }
 
