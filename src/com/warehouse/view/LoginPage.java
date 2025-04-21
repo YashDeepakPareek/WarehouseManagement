@@ -18,7 +18,7 @@ public class LoginPage extends JFrame {
 
         // Initialize the database connection and create a test user.
         db = new DBSQL();
-        db.insertUser("admin", "password123");  // Sample credentials for testing.
+        // db.insertUser("admin", "password123");  // Sample credentials for testing.
 
         // Configure the login form layout using GridBagLayout.
         setLayout(new GridBagLayout());

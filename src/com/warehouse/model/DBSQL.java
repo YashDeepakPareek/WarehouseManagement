@@ -9,9 +9,12 @@ public class DBSQL {
     // Constructor establishes the connection to the database.
     public DBSQL() {
         try {
-            // Using SQLite for simplicity. Replace the connection string if using another DB.
-            String url = "jdbc:sqlite:warehouse.db";
-            connection = DriverManager.getConnection(url);
+            // Outdated: Using SQLite for simplicity. Replace the connection string if using another DB.
+            // Updated: The connection line now refers to an MySQL DB.
+            String url = "jdbc:mysql://localhost:3306/warehouse_db";
+            String user = "warehouse_admin";
+            String password = "admin123";
+            connection = DriverManager.getConnection(url, user, password);
 
             if (connection == null) {
                 System.out.println("Database connection failed!");
@@ -30,7 +33,7 @@ public class DBSQL {
 
     // Create the Users table.
     public void createTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS Users (" + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "username TEXT UNIQUE NOT NULL, " + "password TEXT NOT NULL);";
+        String sql = "CREATE TABLE IF NOT EXISTS Users (" + "id INTEGER PRIMARY KEY AUTO_INCREMENT, " + "username TEXT UNIQUE NOT NULL, " + "password TEXT NOT NULL);";
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
@@ -52,7 +55,7 @@ public class DBSQL {
 
     // Validate user-provided credentials against those stored in the database.
     public boolean validateUser(String username, String password) {
-        String sql = "SELECT * FROM Users WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM login WHERE username = ? AND password = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);

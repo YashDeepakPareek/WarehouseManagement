@@ -52,10 +52,10 @@ public class Dashboard extends JFrame {
             }
         });
 
-        // Order Management button
+        // Item Management button - Alexandre
         ordersButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new OrderManagementFrame().setVisible(true);
+                new ItemManagementFrame().setVisible(true);
             }
         });
 
